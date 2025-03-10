@@ -10,8 +10,8 @@ const userSchema = new mongoose.Schema({
     default: 'broker'
   },
   permissions: {
-    canCreateTasks: { type: Boolean, default: false },
-    canEditTasks: { type: Boolean, default: false }
+    canCreateOrders: { type: Boolean, default: false },
+    canEditOrders: { type: Boolean, default: false }
   }
 });
 

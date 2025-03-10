@@ -10,10 +10,11 @@ class GlobalMiddleWare {
                 }
                 const token = authHeader.split(' ')[1];
                 const decoded = Jwt.verify(token, 'studio');
-  
+
                 if (!decoded) {
                     return res.status(401).json({ message: 'User Not Authorised' });
                 }
+
                 if (allowedRoles.length && !allowedRoles.includes(decoded.role)) {
                     return res.status(403).json({ message: 'Access Denied: Insufficient Permissions' });
                 }

@@ -36,6 +36,13 @@ class Server {
   }
 
   setRouter() {
+    this.app.get('/', (req, res) => {
+      res.send({
+        name: "studio",
+        status: "UP",
+      });
+    });
+
     this.app.use('/auth', userRouter);
     this.app.use('/order', orderRouter);
   }

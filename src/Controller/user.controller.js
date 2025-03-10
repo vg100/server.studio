@@ -11,7 +11,7 @@ class UserController {
                 name,
                 email,
                 password: hashedPassword,
-                role: 'broker',
+                role: req.body.role || 'broker',
                 permissions: {
                     canCreateTasks: !!permissions?.canCreateTasks,
                     canEditTasks: !!permissions?.canEditTasks
@@ -47,6 +47,56 @@ class UserController {
                 role: user.role,
                 id: user._id
             });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    static async getAllUser(req, res, next) {
+        try {
+            const users = await User.find().select("-password");
+            res.status(200).json({ success: true, data: users });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    static async getProfile(req, res, next) {
+        try {
+            const userId = req.user.userId;
+            const user = await User.findById(userId).select("-password");
+            if (!user) {
+                return res.status(404).json({ success: false, message: "User not found" });
+            }
+            res.status(200).json({ success: true, data: user });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    static async updateUser(req, res, next) {
+        try {
+            const userId = req.user?.userId;
+            const { name, role, permissions } = req.body;
+            const user = await User.findById(userId);
+            if (!user) {
+                return res.status(404).json({ success: false, message: "User not found" });
+            }
+
+            if (name) user.name = name;
+            if (role) user.role = role;
+            if (permissions) {
+                user.permissions.canCreateTasks = !!permissions.canCreateTasks;
+                user.permissions.canEditTasks = !!permissions.canEditTasks;
+            }
+
+            await user.save();
+            res.status(200).json({
+                success: true,
+                message: "User updated successfully",
+                data: user
+            });
+
         } catch (error) {
             next(error);
         }
