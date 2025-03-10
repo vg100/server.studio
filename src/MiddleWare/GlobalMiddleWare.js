@@ -10,7 +10,7 @@ class GlobalMiddleWare {
                 }
                 const token = authHeader.split(' ')[1];
                 const decoded = Jwt.verify(token, 'studio');
-
+  
                 if (!decoded) {
                     return res.status(401).json({ message: 'User Not Authorised' });
                 }

@@ -39,7 +39,7 @@ class UserController {
             if (!isMatch) {
                 return res.status(400).json({ success: false, message: "Invalid email or password." });
             }
-            const token = jwt.sign({ userId: user._id, role: user.role }, "task", { expiresIn: "7d" });
+            const token = jwt.sign({ userId: user._id, role: user.role }, "studio", { expiresIn: "7d" });
             res.status(200).json({
                 success: true,
                 message: "Login successful.",
