@@ -5,11 +5,18 @@ const orderSchema = new mongoose.Schema({
   pickup: {
     dateTime: { type: Date, required: true }
   },
-  customerName:{ type: String },
-  customerPhoneNo:{ type: Number },
+  customerName: { type: String },
+
+  customerPhoneNo: {
+    type: String,
+    trim: true,
+    match: [/^\d{10,15}$/, "Invalid phone number format"]
+  },
+
   drop: {
     dateTime: { type: Date, required: true }
   },
+
   equipment: [
     {
       name: { type: String, required: true },
@@ -19,6 +26,7 @@ const orderSchema = new mongoose.Schema({
       totalAmount: { type: Number, required: true }
     }
   ],
+
   accessories: {
     battery: { type: String },
     charger: { type: String },
@@ -26,10 +34,12 @@ const orderSchema = new mongoose.Schema({
     memoryCard: { type: String },
     chargingCable: { type: String }
   },
+
   otherAccessories: {
     hood: { type: Number },
     caps: { type: Number }
   },
+
   pricing: {
     totalAmount: { type: Number, required: true },
     discount: { type: Number, default: 0 },
@@ -37,6 +47,7 @@ const orderSchema = new mongoose.Schema({
     paidAmount: { type: Number, default: 0 },
     balanceAmount: { type: Number, required: true }
   },
+  
   status: {
     type: String,
     enum: ['Pending', 'Completed', 'Cancelled'],

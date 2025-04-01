@@ -1,10 +1,8 @@
-const { Router } = require('express');
-const OrderController = require('../Controller/order.controller');
-const GlobalMiddleWare = require('../MiddleWare/GlobalMiddleWare');
-
+const { Router } = require("express");
+const OrderController = require("../Controller/order.controller");
+const GlobalMiddleWare = require("../MiddleWare/GlobalMiddleWare");
 
 class OrderRouter {
-
     constructor() {
         this.router = Router();
         this.getRoutes();
@@ -14,18 +12,38 @@ class OrderRouter {
     }
 
     getRoutes() {
-        this.router.get('/', GlobalMiddleWare.authenticate, OrderController.getAllTaskByUserId);
-        this.router.get('/:id', GlobalMiddleWare.authenticate, OrderController.getTaskById);
+        this.router.get(
+            "/:id",
+            GlobalMiddleWare.authenticate(["admin", "broker"]),
+            OrderController.getOrderById
+        );
     }
 
     postRoutes() {
-        this.router.post('/', GlobalMiddleWare.authenticate, OrderController.createTaskByUserId);
+        this.router.post(
+            "/",
+            GlobalMiddleWare.authenticate(["admin", "broker"]),
+            GlobalMiddleWare.checkPermissions(["canCreateOrders"]),
+            OrderController.createOrder
+        );
     }
+
     putRoutes() {
-        this.router.put('/:id', GlobalMiddleWare.authenticate, OrderController.updateTaskById);
+        this.router.put(
+            "/:id",
+            GlobalMiddleWare.authenticate(["admin", "broker"]),
+            GlobalMiddleWare.checkPermissions(["canEditOrders"]),
+            OrderController.updateOrder
+        );
     }
+
     deleteRoutes() {
-        this.router.delete('/:id', GlobalMiddleWare.authenticate, OrderController.deleteTaskById);
+        this.router.delete(
+            "/:id",
+            GlobalMiddleWare.authenticate(["admin"]),
+            GlobalMiddleWare.checkPermissions(["canDeleteOrders"]),
+            OrderController.deleteOrder
+        );
     }
 }
 

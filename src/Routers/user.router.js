@@ -9,7 +9,7 @@ class UserRouter {
         this.router = Router();
         this.postRoutes();
         this.getRoutes();
-        this.putRouter();
+        this.putRoutes();
     }
 
     getRoutes() {
@@ -21,9 +21,9 @@ class UserRouter {
         this.router.post('/createUser', GlobalMiddleWare.authenticate(["admin"]), UserController.createUser);
         this.router.post('/login', UserController.login);
     }
-    putRouter() {
-        this.router.put('/updateUser', GlobalMiddleWare.authenticate(["admin"]), UserController.updateUser);
-    }
+    putRoutes() {
+        this.router.put('/updateUser',GlobalMiddleWare.authenticate(["admin", "broker"]), UserController.updateUser);
+    }   
 }
 
 module.exports = new UserRouter().router;

@@ -76,31 +76,51 @@ class UserController {
 
     static async updateUser(req, res, next) {
         try {
-            const userId = req.user?.userId;
-            const { name, role, permissions } = req.body;
-            const user = await User.findById(userId);
-            if (!user) {
+            const loggedInUserId = req.user?.userId;
+            const { userId: targetUserId, name, role, permissions } = req.body;
+    
+            const loggedInUser = await User.findById(loggedInUserId);
+            if (!loggedInUser) {
+                return res.status(404).json({ success: false, message: "Logged-in user not found" });
+            }
+            let userToUpdate;
+            if (loggedInUser.role === "admin" && targetUserId) {
+                // Admin can update their own details OR any broker using `userId`
+                userToUpdate = await User.findById(targetUserId);
+            } else {
+                // Broker can only update their own details
+                userToUpdate = await User.findById(loggedInUserId);
+            }
+    
+            if (!userToUpdate) {
                 return res.status(404).json({ success: false, message: "User not found" });
             }
-
-            if (name) user.name = name;
-            if (role) user.role = role;
-            if (permissions) {
-                user.permissions.canCreateTasks = !!permissions.canCreateTasks;
-                user.permissions.canEditTasks = !!permissions.canEditTasks;
+    
+            // Update name (Allowed for both admin & broker)
+            if (name) userToUpdate.name = name;
+    
+            // Only Admin can update Role & Permissions
+            if (loggedInUser.role === "admin") {
+                if (role) userToUpdate.role = role;
+                if (permissions) {
+                    userToUpdate.permissions.canCreateTasks = !!permissions.canCreateTasks;
+                    userToUpdate.permissions.canEditTasks = !!permissions.canEditTasks;
+                }
             }
-
-            await user.save();
+    
+            await userToUpdate.save();
             res.status(200).json({
                 success: true,
                 message: "User updated successfully",
-                data: user
+                data: userToUpdate
             });
-
+    
         } catch (error) {
             next(error);
         }
     }
+    
+    
 }
 
 module.exports = UserController;

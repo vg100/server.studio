@@ -11,7 +11,8 @@ const userSchema = new mongoose.Schema({
   },
   permissions: {
     canCreateOrders: { type: Boolean, default: false },
-    canEditOrders: { type: Boolean, default: false }
+    canEditOrders: { type: Boolean, default: false },
+    canDeleteOrders: { type: Boolean, default: false }
   }
 });
 

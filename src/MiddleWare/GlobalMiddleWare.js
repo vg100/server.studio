@@ -1,4 +1,5 @@
 const Jwt = require('jsonwebtoken');
+const User = require('../Modals/user.modal');
 
 class GlobalMiddleWare {
     static authenticate(allowedRoles = []) {
@@ -19,6 +20,26 @@ class GlobalMiddleWare {
                     return res.status(403).json({ message: 'Access Denied: Insufficient Permissions' });
                 }
                 req.user = decoded;
+                next();
+            } catch (error) {
+                return res.status(401).json({ message: 'Invalid token', error: error.message });
+            }
+        };
+    }
+    static checkPermissions(requiredPermissions = []) {
+        return async (req, res, next) => {
+            try {
+                const user = await User.findById(req.user._id);
+
+                const userPermissions = user.permissions || {};
+                const missingPermissions = requiredPermissions.filter(permission => !userPermissions[permission]);
+
+                if (missingPermissions.length > 0) {
+                    return res.status(403).json({
+                        message: "Access Denied",
+                        missingPermissions: missingPermissions,
+                    });
+                }
                 next();
             } catch (error) {
                 return res.status(401).json({ message: 'Invalid token', error: error.message });
