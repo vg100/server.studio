@@ -14,7 +14,8 @@ class UserController {
                 role: req.body.role || 'broker',
                 permissions: {
                     canCreateTasks: !!permissions?.canCreateTasks,
-                    canEditTasks: !!permissions?.canEditTasks
+                    canEditTasks: !!permissions?.canEditTasks,
+                    canDeleteOrders: !!permissions?.canDeleteOrders,
                 }
             };
 

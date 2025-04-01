@@ -17,12 +17,9 @@ class OrderController {
   // Create Order
   static async createOrder(req, res, next) {
     try {
-      const { title, description, price } = req.body;
       const newOrder = new Order({
-        title,
-        description,
-        price,
-        createdBy: req.user.userId, // Assign order to logged-in user
+        userId:req.user.userId,
+        ...req.body
       });
 
       await newOrder.save();
