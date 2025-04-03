@@ -36,7 +36,7 @@ class GlobalMiddleWare {
 
                 if (missingPermissions.length > 0) {
                     return res.status(403).json({
-                        message: "Access Denied",
+                        message: "Access Denied: You do not have the required permissions",
                         missingPermissions: missingPermissions,
                     });
                 }

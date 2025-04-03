@@ -45,22 +45,18 @@ class OrderController {
   // Update Order
   static async updateOrder(req, res, next) {
     try {
-      const { title, description, price } = req.body;
-      const updatedOrder = await Order.findByIdAndUpdate(
-        req.params.id,
-        { title, description, price },
-        { new: true } // Return updated order
-      );
+        const { orderId } = req.params;
+        const updatedOrder = await Order.findByIdAndUpdate(orderId, req.body, { new: true });
 
-      if (!updatedOrder) {
-        return res.status(404).json({ message: "Order not found" });
-      }
+        if (!updatedOrder) {
+            return res.status(404).json({ message: "Order not found" });
+        }
 
-      res.status(200).json({ message: "Order updated successfully", order: updatedOrder });
+        res.status(200).json({ message: "Order updated successfully", order: updatedOrder });
     } catch (error) {
-      next(error)
+        next(error);
     }
-  }
+}
 
   // Delete Order
   static async deleteOrder(req, res, next) {
