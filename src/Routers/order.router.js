@@ -17,6 +17,11 @@ class OrderRouter {
             GlobalMiddleWare.authenticate(["admin", "broker"]),
             OrderController.getOrderById
         );
+        this.router.get(
+            "/",
+            GlobalMiddleWare.authenticate(["admin", "broker"]),
+            OrderController.getAllOrder
+        );
     }
 
     postRoutes() {

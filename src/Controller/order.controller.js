@@ -1,6 +1,19 @@
 const Order = require("../Modals/order.modal");
 
 class OrderController {
+
+  static async getAllOrder(req, res, next) {
+    try {
+      const orders = await Order.find();
+      if (orders.length === 0) {
+        return res.status(404).json({ message: "No orders found" });
+      }
+      res.status(200).json(orders);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   // Get Order by ID
   static async getOrderById(req, res, next) {
     try {
