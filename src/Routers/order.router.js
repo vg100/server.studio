@@ -15,7 +15,7 @@ class OrderRouter {
         this.router.get(
             "/:id",
             GlobalMiddleWare.authenticate(["admin", "broker"]),
-            OrderController.getOrderById
+            OrderController.getOrderByUserId
         );
         this.router.get(
             "/",

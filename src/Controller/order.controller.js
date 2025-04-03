@@ -15,9 +15,9 @@ class OrderController {
   }
 
   // Get Order by ID
-  static async getOrderById(req, res, next) {
+  static async getOrderByUserId(req, res, next) {
     try {
-      const order = await Order.findById(req.params.id);
+      const order = await Order.find({userId:req.params.id});
       if (!order) {
         return res.status(404).json({ message: "Order not found" });
       }
