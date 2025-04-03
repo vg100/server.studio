@@ -13,8 +13,8 @@ class UserController {
                 password: hashedPassword,
                 role: req.body.role || 'broker',
                 permissions: {
-                    canCreateTasks: !!permissions?.canCreateTasks,
-                    canEditTasks: !!permissions?.canEditTasks,
+                    canCreateOrders: !!permissions?.canCreateOrders,
+                    canEditOrders: !!permissions?.canEditOrders,
                     canDeleteOrders: !!permissions?.canDeleteOrders,
                 }
             };
