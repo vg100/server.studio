@@ -29,7 +29,7 @@ class GlobalMiddleWare {
     static checkPermissions(requiredPermissions = []) {
         return async (req, res, next) => {
             try {
-                const user = await User.findById(req.user._id);
+                const user = await User.findById(req.user?.userId);
 
                 const userPermissions = user.permissions || {};
                 const missingPermissions = requiredPermissions.filter(permission => !userPermissions[permission]);
