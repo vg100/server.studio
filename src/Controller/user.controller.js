@@ -104,8 +104,9 @@ class UserController {
             if (loggedInUser.role === "admin") {
                 if (role) userToUpdate.role = role;
                 if (permissions) {
-                    userToUpdate.permissions.canCreateTasks = !!permissions.canCreateTasks;
-                    userToUpdate.permissions.canEditTasks = !!permissions.canEditTasks;
+                    userToUpdate.permissions.canCreateOrders = !!permissions.canCreateOrders;
+                    userToUpdate.permissions.canEditOrders = !!permissions.canEditOrders;
+                    userToUpdate.permissions.canDeleteOrders = !!permissions.canDeleteOrders;
                 }
             }
     
