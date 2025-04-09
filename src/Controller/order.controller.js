@@ -45,8 +45,9 @@ class OrderController {
   // Update Order
   static async updateOrder(req, res, next) {
     try {
-        const { orderId } = req.params;
-        const updatedOrder = await Order.findByIdAndUpdate(orderId, req.body, { new: true });
+        const { id } = req.params;
+    
+        const updatedOrder = await Order.findByIdAndUpdate(id, req.body, { new: true });
 
         if (!updatedOrder) {
             return res.status(404).json({ message: "Order not found" });
