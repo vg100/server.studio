@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const userRouter = require("./Routers/user.router");
 const orderRouter = require("./Routers/order.router");
+const stockRouter = require("./Routers/stock.router");
 
 class Server {
   constructor() {
@@ -45,6 +46,7 @@ class Server {
 
     this.app.use('/auth', userRouter);
     this.app.use('/order', orderRouter);
+    this.app.use('/stock', stockRouter);
   }
 
 
