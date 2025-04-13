@@ -10,6 +10,7 @@ class UserRouter {
         this.postRoutes();
         this.getRoutes();
         this.putRoutes();
+        this.deleteRoutes();
     }
 
     getRoutes() {
@@ -22,8 +23,13 @@ class UserRouter {
         this.router.post('/login', UserController.login);
     }
     putRoutes() {
-        this.router.put('/updateUser',GlobalMiddleWare.authenticate(["admin", "broker"]), UserController.updateUser);
-    }   
+        this.router.put('/updateUser', GlobalMiddleWare.authenticate(["admin", "broker"]), UserController.updateUser);
+    }
+
+    deleteRoutes() {
+        this.router.delete("/:id", GlobalMiddleWare.authenticate(["admin"]), UserController.deleteUser);
+    }
+
 }
 
 module.exports = new UserRouter().router;

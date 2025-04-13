@@ -12,40 +12,20 @@ class StockRouter {
     }
 
     getRoutes() {
-        this.router.get(
-            "/:id",
-            GlobalMiddleWare.authenticate(["admin", "broker"]),
-            StockController.getStockByUserId
-        );
-        this.router.get(
-            "/",
-            GlobalMiddleWare.authenticate(["admin", "broker"]),
-            StockController.getAllStock
-        );
+        this.router.get("/:id", GlobalMiddleWare.authenticate(["admin", "broker"]), StockController.getStockByUserId);
+        this.router.get("/", GlobalMiddleWare.authenticate(["admin", "broker"]), StockController.getAllStock);
     }
 
     postRoutes() {
-        this.router.post(
-            "/",
-            GlobalMiddleWare.authenticate(["admin", "broker"]),
-            StockController.createStock
-        );
+        this.router.post("/", GlobalMiddleWare.authenticate(["admin", "broker"]), StockController.createStock);
     }
 
     putRoutes() {
-        this.router.put(
-            "/:id",
-            GlobalMiddleWare.authenticate(["admin", "broker"]),
-            StockController.updateStock
-        );
+        this.router.put("/:id", GlobalMiddleWare.authenticate(["admin", "broker"]), StockController.updateStock);
     }
 
     deleteRoutes() {
-        this.router.delete(
-            "/:id",
-            GlobalMiddleWare.authenticate(["admin"]),
-            StockController.deleteStock
-        );
+        this.router.delete("/:id", GlobalMiddleWare.authenticate(["admin"]), StockController.deleteStock);
     }
 }
 

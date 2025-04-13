@@ -79,7 +79,7 @@ class UserController {
         try {
             const loggedInUserId = req.user?.userId;
             const { userId: targetUserId, name, role, permissions } = req.body;
-    
+
             const loggedInUser = await User.findById(loggedInUserId);
             if (!loggedInUser) {
                 return res.status(404).json({ success: false, message: "Logged-in user not found" });
@@ -92,14 +92,14 @@ class UserController {
                 // Broker can only update their own details
                 userToUpdate = await User.findById(loggedInUserId);
             }
-    
+
             if (!userToUpdate) {
                 return res.status(404).json({ success: false, message: "User not found" });
             }
-    
+
             // Update name (Allowed for both admin & broker)
             if (name) userToUpdate.name = name;
-    
+
             // Only Admin can update Role & Permissions
             if (loggedInUser.role === "admin") {
                 if (role) userToUpdate.role = role;
@@ -109,20 +109,30 @@ class UserController {
                     userToUpdate.permissions.canDeleteOrders = !!permissions.canDeleteOrders;
                 }
             }
-    
+
             await userToUpdate.save();
             res.status(200).json({
                 success: true,
                 message: "User updated successfully",
                 data: userToUpdate
             });
-    
+
         } catch (error) {
             next(error);
         }
     }
-    
-    
+    static async deleteUser(req, res, next) {
+        try {
+            const deletedUser = await User.findByIdAndDelete(req.params.id);
+            if (!deletedUser) {
+                return res.status(404).json({ message: "User not found" });
+            }
+            res.status(200).json({ message: "User deleted successfully" });
+        } catch (error) {
+            next(error)
+        }
+    }
+
 }
 
 module.exports = UserController;

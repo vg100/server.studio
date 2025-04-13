@@ -1,7 +1,5 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
-
 const cors = require("cors");
 const userRouter = require("./Routers/user.router");
 const orderRouter = require("./Routers/order.router");
@@ -10,6 +8,8 @@ const stockRouter = require("./Routers/stock.router");
 class Server {
   constructor() {
     this.app = express();
+    this.PORT = process.env.PORT || 5000;
+    this.ENV = process.env.NODE_ENV || "development";
     this.setConfiguration();
     this.setRouter();
     this.error404Handler();
@@ -37,13 +37,7 @@ class Server {
   }
 
   setRouter() {
-    this.app.get('/', (req, res) => {
-      res.send({
-        name: "studio",
-        status: "UP",
-      });
-    });
-
+    this.app.get('/', (req, res) => { res.send({ name: "studio", status: "UP", }) });
     this.app.use('/auth', userRouter);
     this.app.use('/order', orderRouter);
     this.app.use('/stock', stockRouter);
@@ -73,6 +67,13 @@ class Server {
       console.warn(`404 error - Not Found: ${req.originalUrl}`);
     });
   }
+
+  start() {
+    this.app.listen(this.PORT, () => {
+      console.log(`🚀 Server running on port ${this.PORT} [${this.ENV}]`);
+    });
+  }
+
 }
 
 module.exports = Server;
