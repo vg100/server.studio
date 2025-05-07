@@ -1,10 +1,11 @@
 const Order = require("../Modals/order.modal");
+const Stock = require("../Modals/stock.modal");
 
 class OrderController {
 
   static async getAllOrder(req, res, next) {
     try {
-      const orders = await Order.find();
+      const orders = await Order.find().populate('equipment.item');
       if (orders.length === 0) {
         return res.status(404).json({ message: "No orders found" });
       }
@@ -68,6 +69,32 @@ class OrderController {
       }
 
       res.status(200).json({ message: "Order deleted successfully" });
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  static async returnProduct(req, res, next) {
+
+    try {
+
+      const { bookingId, equipmentId } = req.body;
+      const booking = await Order.findById(bookingId);
+      if (!booking) return res.status(404).json({ error: 'Booking not found' });
+    
+      const item = booking.equipment.find(eq => eq.item.toString() === equipmentId);
+      if (!item) return res.status(404).json({ error: 'Equipment not found in this booking' });
+    
+      if (item.status === 'Returned') {
+        return res.status(400).json({ error: 'Equipment already returned' });
+      }
+    
+      item.status = 'Returned';
+      await booking.save();
+    
+      await Stock.findByIdAndUpdate(equipmentId, { status: 'available' });
+    
+      res.json({ message: 'Equipment returned successfully' });
     } catch (error) {
       next(error)
     }

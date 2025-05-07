@@ -18,6 +18,7 @@ class OrderRouter {
 
     postRoutes() {
         this.router.post("/", GlobalMiddleWare.authenticate(["admin", "broker"]), GlobalMiddleWare.checkPermissions(["canCreateOrders"]), OrderController.createOrder);
+        this.router.post("/return",GlobalMiddleWare.authenticate(["admin", "broker"]),OrderController.returnProduct);
     }
 
     putRoutes() {
