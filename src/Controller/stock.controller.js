@@ -31,12 +31,12 @@ class StockController {
   static async createStock(req, res, next) {
     try {
       const newStock = new Stock({
-        userId:req.user.userId,
+        addedByUser:req.user.userId,
         ...req.body
       });
 
       await newStock.save();
-      res.status(201).json({ message: "Stock created successfully", order: newStock });
+      res.status(201).json({ message: "Stock created successfully", equipment: newStock });
     } catch (error) {
       next(error)
     }
