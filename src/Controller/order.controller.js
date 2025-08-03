@@ -34,7 +34,7 @@ class OrderController {
       const { equipment } = req.body;
       const newOrder = new Order({
         userId: req.user.userId,
-        equipment
+        ...req.body
       });
 
       for (const item of equipment) {
